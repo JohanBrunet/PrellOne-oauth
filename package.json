@@ -1,0 +1,42 @@
+{
+  "name": "prellone-oauth",
+  "version": "1.0.0",
+  "description": "OAuth2 server for PrellOne app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohanBrunet/PrellOne-oauth.git"
+  },
+  "keywords": [
+    "oauth",
+    "oauth2"
+  ],
+  "author": "Johan Brunet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JohanBrunet/PrellOne-oauth/issues"
+  },
+  "homepage": "https://github.com/JohanBrunet/PrellOne-oauth#readme",
+  "dependencies": {
+    "bcrypt": "3.0.0",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^6.1.0",
+    "ejs-locals": "^1.0.2",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.3.12",
+    "oauth2-server": "^3.0.1",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.6"
+  }
+}
