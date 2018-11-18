@@ -79,7 +79,11 @@ router.post('/authorize', asyncWrapper(async (req, res, next) => {
                     }
 
                     try {
-                        return requestPromise(options).then( res => res.user).catch( err => err)
+                        return requestPromise(options).then( res => {
+                                return res.user
+                            }).catch( err => {
+                                throw err
+                            })
                     }
                     catch (err) {
                         return err;

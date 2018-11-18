@@ -1,13 +1,15 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const OAuthAuthorizationCode = new Schema({
     authorizationCode: String,
-    expiresOn: Date,
-    redirectUri: String,
+    expiresAt: Date,
+    redirect_uri: String,
     scope: String,
-    client: { type: Schema.Types.ObjectId, ref: 'OAuthClient' },
-    user: { type: Schema.Types.ObjectId, ref: 'User' }
+    client: { 
+        id: { type: String }
+    },
+    user: { type: Object }
 })
 
 
@@ -16,7 +18,7 @@ const oAuthAuthorizationCode = mongoose.model('OAuthAuthorizationCode');
 
 oAuthAuthorizationCode.getAuthorizationCode = async (authorizationCode) => {
     try {
-        const code = await oAuthAuthorizationCode.findOne({ authorizationCode: authorizationCode }).lean()
+        const code = await oAuthAuthorizationCode.findOne({ authorizationCode: authorizationCode })
         return code
     } catch(error) {
         throw error
@@ -24,6 +26,7 @@ oAuthAuthorizationCode.getAuthorizationCode = async (authorizationCode) => {
 }
 
 oAuthAuthorizationCode.revokeAuthorizationCode = async (code) => {
+    console.log(code)
     await code.remove()
     return true
 }
@@ -31,11 +34,13 @@ oAuthAuthorizationCode.revokeAuthorizationCode = async (code) => {
 oAuthAuthorizationCode.saveAuthorizationCode = async (authorizationCode, client, user) => {
     var autorizeCode = new oAuthAuthorizationCode({
         authorizationCode: authorizationCode.authorizationCode,
-        redirectUri: authorizationCode.redirectUri,
-        expiresOn: authorizationCode.expiresAt,
+        redirect_ri: authorizationCode.redirectUri,
+        expiresAt: authorizationCode.expiresAt,
         scope: authorizationCode.scope,
-        client: client._id,
-        user: user.id
+        client: {
+            id: client.id
+        },
+        user: user
     })
 
     return await autorizeCode.save()

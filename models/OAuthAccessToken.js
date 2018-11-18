@@ -3,11 +3,13 @@ const Schema = mongoose.Schema
 const scopes = require('../scopes')
 const jwt = require('jsonwebtoken')
 
-var OAuthAccessTokenSchema = new Schema({
+const OAuthAccessTokenSchema = new Schema({
     accessToken: { type: String },
     accessTokenExpiresOn: { type: Date },
-    client: { type: Schema.Types.ObjectId, ref: "OAuthClient" },
-    user: { type: Schema.Types.ObjectId, ref: "User" }
+    client: {
+        id: { type: String }
+    },
+    user: { type: Object }
 })
 
 mongoose.model('OAuthAccessToken', OAuthAccessTokenSchema)
@@ -28,8 +30,10 @@ oAuthAccesToken.getAccessToken = (bearerToken) => {
 oAuthAccesToken.saveToken = (token, client, user) => {
     var accessToken = new oAuthAccesToken({
         accessToken: token.accessToken,
-        accessTokenExpiresOn: token.accessTokenExpiresOn,
-        client: client.clientId,
+        accessTokenExpiresOn: token.expiresAt,
+        client: {
+            id: client.id
+        },
         scope: token.scope,
         user: user.id,
     })
@@ -39,15 +43,7 @@ oAuthAccesToken.saveToken = (token, client, user) => {
             else resolve(data)
         })
     }).then((saveResult) => {
-        saveResult = saveResult && typeof saveResult == 'object' ? saveResult.toJSON() : saveResult
-
-        var data = new Object()
-        for (var prop in saveResult) data[prop] = saveResult[prop]
-
-        data.client = data.clientId
-        data.user = data.userId
-
-        return data
+        return saveResult && typeof saveResult == 'object' ? saveResult.toJSON() : saveResult
     });
 }
 
